@@ -9,6 +9,7 @@ services:
             internal:
                 aliases:
                     - timeseries-db.docker.local
+        restart: unless-stopped
         logging:
             driver: syslog
             options:
@@ -219,5 +220,5 @@ services:
 
 networks:
     internal:
-        name: robotLab
-        driver: bridge
+        name: 3DPrinting
+        external: true
