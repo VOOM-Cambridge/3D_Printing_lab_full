@@ -1,0 +1,68 @@
+version: '2'
+
+services:
+    db:
+        image: influxdb:2.6
+        command: "./entrypoint.sh --reporting-disabled"
+        volumes:
+          - ./data/influxdb2:/var/lib/influxdb2:rw
+        ports:
+          - "8086:8086"
+        environment: 
+          - DOCKER_INFLUXDB_INIT_MODE=setup
+          - DOCKER_INFLUXDB_INIT_USERNAME=${DB_ADMIN_USER}
+          - DOCKER_INFLUXDB_INIT_PASSWORD=${DB_ADMIN_INITIAL_PASSWORD}
+          - DOCKER_INFLUXDB_INIT_ORG=${DB_ORG}
+          - DOCKER_INFLUXDB_INIT_BUCKET=${DB_BUCKET}
+          - DB_BUCKET_SECOND = ${DB_BUCKET_SECOND}
+          - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DB_ADMIN_INITIAL_TOKEN}
+    telegraf:
+        image: telegraf:1.26
+        volumes:
+          - ./config/telegraf_emon.conf:/etc/telegraf/telegraf.conf
+        environment: 
+          - DOCKER_INFLUXDB_ORG=${DB_ORG}
+          - DOCKER_INFLUXDB_BUCKET=${DB_BUCKET}
+          - DOCKER_CURRENT_INFLUXDB_TOKEN=${DB_ADMIN_INITIAL_TOKEN}
+    # telegraf_fault:
+    #     image: telegraf:1.26
+    #     volumes:
+    #       - ./config/telegraf_fault.conf:/etc/telegraf/telegraf.conf
+    #     environment: 
+    #       - DOCKER_INFLUXDB_ORG=${DB_ORG}
+    #       - DOCKER_INFLUXDB_BUCKET=${DB_BUCKET_SECOND}
+    #       - DOCKER_CURRENT_INFLUXDB_TOKEN=${DB_ADMIN_INITIAL_TOKEN}
+    telegraf_waste:
+        image: telegraf:1.26
+        volumes:
+          - ./config/telegraf_waste.conf:/etc/telegraf/telegraf.conf
+        environment: 
+          - DOCKER_INFLUXDB_ORG=${DB_ORG}
+          - DOCKER_INFLUXDB_BUCKET=${DB_BUCKET_THIRD}
+          - DOCKER_CURRENT_INFLUXDB_TOKEN=${DB_ADMIN_INITIAL_TOKEN}
+    telegraf_track:
+        image: telegraf:1.26
+        volumes:
+          - ./config/telegraf_tracking.conf:/etc/telegraf/telegraf.conf
+        environment: 
+          - DOCKER_INFLUXDB_ORG=${DB_ORG}
+          - DOCKER_INFLUXDB_BUCKET=${DB_BUCKET_TRACK}
+          - DOCKER_CURRENT_INFLUXDB_TOKEN=${DB_ADMIN_INITIAL_TOKEN}
+    telegraf_worker:
+        image: telegraf:1.26
+        volumes:
+          - ./config/telegra_worker.conf:/etc/telegraf/telegraf.conf
+        environment: 
+          - DOCKER_INFLUXDB_ORG=${DB_ORG}
+          - DOCKER_INFLUXDB_BUCKET=${DB_BUCKET_WORKER}
+          - DOCKER_CURRENT_INFLUXDB_TOKEN=${DB_ADMIN_INITIAL_TOKEN}
+    telegraf_fault:
+        image: telegraf:1.26
+        volumes:
+          - ./config/telegraf_fault_new.conf:/etc/telegraf/telegraf.conf
+        environment: 
+          - DOCKER_INFLUXDB_ORG=${DB_ORG}
+          - DOCKER_INFLUXDB_BUCKET=${DB_BUCKET}
+          - DOCKER_CURRENT_INFLUXDB_TOKEN=${DB_ADMIN_INITIAL_TOKEN}
+
+

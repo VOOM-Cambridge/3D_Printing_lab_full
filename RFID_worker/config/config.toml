@@ -1,0 +1,6 @@
+[constants]
+serialID = '16c0:27db'
+location = 'Robot_Lab' 
+brokerIP = 'mqtt.docker.local'
+
+
