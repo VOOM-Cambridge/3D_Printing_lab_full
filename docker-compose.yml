@@ -113,22 +113,22 @@ services:
         depends_on:
             - "mqtt_broker"
             - "timeseries-db"
-    # utilisation:
-    #     extends:
-    #         file: utilisationCalc/app.yml
-    #         service: appUtil
-    #     networks:
-    #         internal:
-    #             aliases:
-    #                 - utilisation.docker.local
-    #     #logging:
-    #     #    driver: syslog
-    #     #    options:
-    #     #        tag: docker-utilisation
-    #     restart: unless-stopped
-    #     depends_on:
-    #         - "mqtt_broker"
-    #         - "timeseries-db"
+    utilisation:
+        extends:
+            file: utilisationCalc/app.yml
+            service: appUtil
+        networks:
+            internal:
+                aliases:
+                    - utilisation.docker.local
+        #logging:
+        #    driver: syslog
+        #    options:
+        #        tag: docker-utilisation
+        restart: unless-stopped
+        depends_on:
+            - "mqtt_broker"
+            - "timeseries-db"
 
     mqtt_broker:
         extends:
@@ -143,37 +143,37 @@ services:
             internal:
                 aliases:
                     - mqtt.docker.local
-    # user-input-dc:
-    #     extends:
-    #         file: user_input_dc/app.yml
-    #         service: app
-    #     networks:
-    #         internal:
-    #             aliases:
-    #                 - user-input-dc.docker.local
-    #     #logging:
-    #     #        driver: syslog
-    #     #        options:
-    #     #                tag: docker-user-input-dc
-    #     restart: unless-stopped
-    #     depends_on:
-    #         - "timeseries-db"
-    #         - "reasons-db"
-    # reasons-db:
-    #     extends:
-    #         file: reasons_sds/app.yml
-    #         service: app
-    #     networks:
-    #         internal:
-    #             aliases:
-    #                 - reasons-db.docker.local
-    #     #logging:
-    #     #        driver: syslog
-    #     #        options:
-    #     #                tag: docker-reasons-db
-    #     env_file:
-    #         - django_secret_key
-    #     restart: unless-stopped
+    user-input-dc:
+        extends:
+            file: user_input_dc/app.yml
+            service: app
+        networks:
+            internal:
+                aliases:
+                    - user-input-dc.docker.local
+        #logging:
+        #        driver: syslog
+        #        options:
+        #                tag: docker-user-input-dc
+        restart: unless-stopped
+        depends_on:
+            - "timeseries-db"
+            - "reasons-db"
+    reasons-db:
+        extends:
+            file: reasons_sds/app.yml
+            service: app
+        networks:
+            internal:
+                aliases:
+                    - reasons-db.docker.local
+        #logging:
+        #        driver: syslog
+        #        options:
+        #                tag: docker-reasons-db
+        env_file:
+            - django_secret_key
+        restart: unless-stopped
 
 networks:
     internal:
