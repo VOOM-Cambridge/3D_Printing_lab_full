@@ -10,25 +10,10 @@ services:
                 aliases:
                     - timeseries-db.docker.local
         restart: unless-stopped
-        #logging:
-        #    driver: syslog
-        #    options:
-        #        tag: docker-timeseries-db
-    # fault-dc:
-    #     extends:
-    #         file: fault_dc/app.yml
-    #         service: app
-    #     networks:
-    #         internal:
-    #             aliases:
-    #                 - fault-dc.docker.local
-    #     #logging:
-    #     #        driver: syslog
-    #     #        options:
-    #     #                tag: docker-fault-dc
-    #     restart: unless-stopped
-    #     depends_on:
-    #         - "mqtt_broker"
+        logging:
+           driver: syslog
+           options:
+               tag: docker-timeseries-db
     timeseries-db-input:
         extends:
             file: timeseries_sds/app.yml
@@ -37,10 +22,10 @@ services:
             internal:
                 aliases:
                     - timeseries-input.docker.local
-        #logging:
-        #    driver: syslog
-        #    options:
-        #        tag: docker-timeseries-input
+        logging:
+           driver: syslog
+           options:
+               tag: docker-timeseries-input
         restart: unless-stopped
         depends_on:
             - "timeseries-db"
@@ -53,10 +38,10 @@ services:
             internal:
                 aliases:
                     - timeseries-input-fault.docker.local
-        #logging:
-        #    driver: syslog
-        #    options:
-        #        tag: docker-timeseries-input-fault
+        logging:
+           driver: syslog
+           options:
+               tag: docker-timeseries-input-fault
         restart: unless-stopped
         depends_on:
             - "timeseries-db"
@@ -69,10 +54,10 @@ services:
             internal:
                 aliases:
                     - timeseries-input-waste.docker.local
-        #logging:
-        #    driver: syslog
-        #    options:
-        #        tag: docker-timeseries-input-waste
+        logging:
+           driver: syslog
+           options:
+               tag: docker-timeseries-input-waste
         restart: unless-stopped
         depends_on:
             - "timeseries-db"
@@ -91,8 +76,8 @@ services:
             - "mqtt_broker"
     rfid-worker-reader:
         extends:
-            file: RFID_worker/app.yml
-            service: appRFID
+            file: worker_tracking/app.yml
+            service: worker_tracking
         networks:
             internal:
                 aliases:
@@ -121,10 +106,10 @@ services:
             internal:
                 aliases:
                     - utilisation.docker.local
-        #logging:
-        #    driver: syslog
-        #    options:
-        #        tag: docker-utilisation
+        logging:
+           driver: syslog
+           options:
+               tag: docker-utilisation
         restart: unless-stopped
         depends_on:
             - "mqtt_broker"
@@ -135,10 +120,10 @@ services:
             file: mqtt_broker/app.yml
             service: app
         restart: unless-stopped
-        #logging:
-        #    driver: syslog
-        #    options:
-        #        tag: docker-mqtt-broker
+        logging:
+           driver: syslog
+           options:
+               tag: docker-mqtt-broker
         networks:
             internal:
                 aliases:
@@ -151,10 +136,10 @@ services:
             internal:
                 aliases:
                     - user-input-dc.docker.local
-        #logging:
-        #        driver: syslog
-        #        options:
-        #                tag: docker-user-input-dc
+        logging:
+               driver: syslog
+               options:
+                       tag: docker-user-input-dc
         restart: unless-stopped
         depends_on:
             - "timeseries-db"
@@ -167,10 +152,10 @@ services:
             internal:
                 aliases:
                     - reasons-db.docker.local
-        #logging:
-        #        driver: syslog
-        #        options:
-        #                tag: docker-reasons-db
+        logging:
+               driver: syslog
+               options:
+                       tag: docker-reasons-db
         env_file:
             - django_secret_key
         restart: unless-stopped
@@ -178,4 +163,3 @@ services:
 networks:
     internal:
         name: 3DPrinting
-        external: true

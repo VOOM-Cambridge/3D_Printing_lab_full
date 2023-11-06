@@ -1,9 +1,0 @@
-[constants]
-serialID = '16c0:27db'
-location = 'Robot_Lab' 
-brokerIP = 'localhost'
-
-[docker]
-    url = "mqtt.docker.local"
-    frequency_record_seconds = 1
-    ## Token for authentication.
